@@ -28,20 +28,27 @@ function App() {
     document.getElementById('dropArea').classList.remove('onDragOver');
   }
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    console.log('File(s) dropped');
-  
-    document.getElementById('dropArea').classList.remove('onDragOver');
-  
-    if (e.dataTransfer.items) {
-      const droppedFiles = [...e.dataTransfer.items]
-        .filter((item) => item.kind === 'file')
-        .map((item) => item.getAsFile());
-  
-      for (const file of droppedFiles) {
-        handleImage(file, 3000);
+  const handleDrop = async (e) => {
+    try {
+      e.preventDefault();
+      console.log('File(s) dropped');
+    
+      document.getElementById('dropArea').classList.remove('onDragOver');
+    
+      if (e.dataTransfer.items) {
+        const droppedFiles = [...e.dataTransfer.items]
+          .filter((item) => item.kind === 'file')
+          .map((item) => item.getAsFile());
+        
+        const result = [];
+        for (const file of droppedFiles) {
+          const imageDetails = await handleImage(file, 3000);
+          result.push(imageDetails);
+        }
+        setImages((prev) => [...prev, ...result]);
       }
+    } catch (error) {
+      console.error(error);
     }
   }
 
