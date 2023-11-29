@@ -31,6 +31,7 @@ function App() {
   const handleDrop = async (e) => {
     try {
       e.preventDefault();
+      setImages([]);
       console.log('File(s) dropped');
     
       document.getElementById('dropArea').classList.remove('onDragOver');
@@ -54,6 +55,7 @@ function App() {
 
   const handleInputChange = async (e) => {
     try {
+      setImages([]);
       const input = e.target;
       
       if (!input.files || input.files.length < 1) return;
