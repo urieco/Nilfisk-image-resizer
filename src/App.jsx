@@ -43,7 +43,7 @@ function App() {
         
         const result = [];
         for (const file of droppedFiles) {
-          const imageDetails = await handleImage(file, 3000);
+          const imageDetails = await handleImage(file, 3000, 1);
           result.push(imageDetails);
         }
         setImages((prev) => [...prev, ...result]);
@@ -63,7 +63,7 @@ function App() {
       const result = [];
   
       for (const file of input.files) {
-        const imageDetails = await handleImage(file, 3000);
+        const imageDetails = await handleImage(file, 3000, 1);
         result.push(imageDetails);
       }
   
