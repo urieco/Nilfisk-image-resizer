@@ -19,6 +19,10 @@ function Result({ images }) {
           <div>File Size: {image.fileSize} MB</div>
           <div>Extension: {image.extension}</div>
           <div>DPI: {image.dpi}</div>
+          <div style={{width: "auto"}}>
+            <br />
+            <img src={image.resizedSrc} />
+          </div>
         </div>
       ))}
     </div>

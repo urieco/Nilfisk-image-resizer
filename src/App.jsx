@@ -28,25 +28,34 @@ function App() {
     document.getElementById('dropArea').classList.remove('onDragOver');
   }
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    console.log('File(s) dropped');
-  
-    document.getElementById('dropArea').classList.remove('onDragOver');
-  
-    if (e.dataTransfer.items) {
-      const droppedFiles = [...e.dataTransfer.items]
-        .filter((item) => item.kind === 'file')
-        .map((item) => item.getAsFile());
-  
-      for (const file of droppedFiles) {
-        handleImage(file, 3000);
+  const handleDrop = async (e) => {
+    try {
+      e.preventDefault();
+      setImages([]);
+      console.log('File(s) dropped');
+    
+      document.getElementById('dropArea').classList.remove('onDragOver');
+    
+      if (e.dataTransfer.items) {
+        const droppedFiles = [...e.dataTransfer.items]
+          .filter((item) => item.kind === 'file')
+          .map((item) => item.getAsFile());
+        
+        const result = [];
+        for (const file of droppedFiles) {
+          const imageDetails = await handleImage(file, 3000, 1);
+          result.push(imageDetails);
+        }
+        setImages((prev) => [...prev, ...result]);
       }
+    } catch (error) {
+      console.error(error);
     }
   }
 
   const handleInputChange = async (e) => {
     try {
+      setImages([]);
       const input = e.target;
       
       if (!input.files || input.files.length < 1) return;
@@ -54,7 +63,7 @@ function App() {
       const result = [];
   
       for (const file of input.files) {
-        const imageDetails = await handleImage(file, 3000);
+        const imageDetails = await handleImage(file, 3000, 1);
         result.push(imageDetails);
       }
   
