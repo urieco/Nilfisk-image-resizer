@@ -14,22 +14,19 @@ async function handleImage(file, newWidth, maxSize) {
   }
   
   let compressedFile = await imageCompression(file, options);
-  let compressedImage;
-  if (compressedFile.size > 1024576) {
+  let blobURL;
 
+  if (compressedFile.size > 1024576) {
+    // compress.js only iterates over an array. 
     compressedFile = [compressedFile];
     const compress = new Compress();
     await compress.compress(compressedFile, {
-      size: 1,
+      size: maxSize,
       quality: 0.9,
       resize: false,
     }).then((result) => {
-      const img = result[0];
-      const base64str = img.data;
-      const imgExt = img.ext;
-      compressedImage = Compress.convertBase64ToFile(base64str, imgExt);
-      console.log(compressedImage);
-    })
+      blobURL = result[0].prefix + result[0].data;
+    });
   } else {
     blobURL = URL.createObjectURL(compressedFile);
   }
@@ -43,8 +40,7 @@ async function handleImage(file, newWidth, maxSize) {
 
       const exifObj = piexif.load(e.target.result);
       const exifStr = piexif.dump(exifObj);
-      const testURL = piexif.insert(exifStr, compressedImage);
-      console.log(testURL);
+      const blobURLWithMetadata = piexif.insert(exifStr, blobURL);
       
       img.onload = () => {
         const fileSize = (file.size / 1048576).toFixed(3);
@@ -60,7 +56,7 @@ async function handleImage(file, newWidth, maxSize) {
           fileSize: fileSize,
           extension: extension,
           dpi: dpi,
-          resizedSrc: blobURL,
+          resizedSrc: blobURLWithMetadata,
         });
       }
     }
