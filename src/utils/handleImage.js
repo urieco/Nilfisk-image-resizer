@@ -15,6 +15,9 @@ async function handleImage(file, newWidth, maxSize) {
   
   let compressedFile = await imageCompression(file, options);
   let blobURL;
+  let resizedHeight;
+  let resizedWidth;
+  let outputSize;
 
   if (compressedFile.size > 1024576) {
     // compress.js only iterates over an array. 
@@ -22,10 +25,14 @@ async function handleImage(file, newWidth, maxSize) {
     const compress = new Compress();
     await compress.compress(compressedFile, {
       size: maxSize,
-      quality: 0.9,
+      quality: 0.95,
       resize: false,
     }).then((result) => {
-      blobURL = result[0].prefix + result[0].data;
+      const outputImage = result[0];
+      blobURL = outputImage.prefix + outputImage.data;
+      resizedWidth = outputImage.endWidthInPx;
+      resizedHeight = outputImage.endHeightInPx;
+      outputSize = outputImage.endSizeInMb.toFixed(3);
     });
   } else {
     blobURL = URL.createObjectURL(compressedFile);
@@ -57,6 +64,9 @@ async function handleImage(file, newWidth, maxSize) {
           extension: extension,
           dpi: dpi,
           resizedSrc: blobURLWithMetadata,
+          resizedWidth: resizedWidth,
+          resizedHeight: resizedHeight,
+          outputSize: outputSize
         });
       }
     }
