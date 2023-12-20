@@ -5,8 +5,6 @@ import piexif from 'piexifjs'
 async function handleImage(file, newWidth, maxSize) {
   try {
     if (!file.type.startsWith('image/')) return;
-    if (file.size < 1048576) return;
-  
     
     const options = {
       maxWidthOrHeight: newWidth,
