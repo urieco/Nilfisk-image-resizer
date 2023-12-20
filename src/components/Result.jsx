@@ -26,7 +26,6 @@ function Result({ images }) {
           <div>
             <br />
             <img className="outputImage" src={image.resizedSrc} alt={image.name}/>
-            <a href={image.resizedSrc} download={image.name}></a>
           </div>
           <div>New Resolution: {image.resizedWidth} x {image.resizedHeight} px</div>
           <div>New File Size: {image.outputSize} MB</div>

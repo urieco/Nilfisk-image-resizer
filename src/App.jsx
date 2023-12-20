@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Result from './components/Result';
+import downloadOutputImage from './utils/downloadOutputImage';
 
 import './App.css';
 
@@ -42,32 +43,39 @@ function App() {
           .map((item) => item.getAsFile());
         
         const result = [];
+        let count = 1;
+
         for (const file of droppedFiles) {
           const imageDetails = await handleImage(file, 3000, 1);
           result.push(imageDetails);
+          count += 1;
         }
         setImages((prev) => [...prev, ...result]);
+        setTimeout(() => downloadOutputImage(), 1000*count);
       }
     } catch (error) {
       console.error(error);
     }
   }
-
+  
   const handleInputChange = async (e) => {
     try {
       setImages([]);
       const input = e.target;
       
       if (!input.files || input.files.length < 1) return;
-  
+      
       const result = [];
-  
+      let count = 1;
+      
       for (const file of input.files) {
         const imageDetails = await handleImage(file, 3000, 1);
         result.push(imageDetails);
+        count += 1;
       }
-  
+      
       setImages((prev) => [...prev, ...result]);
+      setTimeout(() => downloadOutputImage(), 1000*count);
     } catch(error) {
       console.error(error);
     }
