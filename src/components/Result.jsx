@@ -5,6 +5,8 @@ function Result({ images }) {
   return (
     <div id="result">
       {images.map((image) => (
+        !image.isProcessed ? 
+        (null) :
         <div 
           key={idGenerator(3)}
           className="imageInfoContainer"

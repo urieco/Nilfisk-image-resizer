@@ -15,7 +15,8 @@ function App() {
       height: 320,
       fileSize: 0.031,
       extension: 'jpg',
-      dpi: 'N/a',
+      dpi: 'N/A',
+      isProcessed: true,
     }
   ]);
 
